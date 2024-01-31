@@ -1,0 +1,471 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>FurEver</title>
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bulma@0.9.3/css/bulma.min.css"
+    />
+
+    <style>
+      .round-logo {
+        width: 45px;
+        height: 45px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 25px;
+        font-weight: bold;
+      }
+    </style>
+  </head>
+  <body>
+    <!--  sign up modal ... are hidden by default ... use javascript to display/hide them -->
+    <div class="modal" id="signup_modal">
+      <div class="modal-background" id="signup_modalbg"></div>
+      <div class="modal-content p-6 has-background-warning has-text-black">
+        <h1 class="is-size-3 title">Sign Up!</h1>
+        <form id="signup_form">
+          <!-- Email -->
+          <div class="field">
+            <label class="label">Email</label>
+            <div class="control">
+              <input type="email" id="email" />
+            </div>
+          </div>
+
+          <!-- Password -->
+          <div class="field">
+            <label class="label">Password</label>
+            <div class="control">
+              <input type="password" id="password" />
+            </div>
+          </div>
+
+          <div id="password_requirements_message" class="has-text-danger"></div>
+
+          <!-- submit -->
+          <div class="field">
+            <div class="control">
+              <button class="m-3 button is-link" id="signup_button">
+                Submit
+              </button>
+            </div>
+          </div>
+
+          <!-- div error -->
+          <div class="error has-text-danger"></div>
+        </form>
+      </div>
+    </div>
+
+    <!-- sign in modal -->
+    <div class="modal" id="login_modal">
+      <div class="modal-background" id="login_modalbg"></div>
+      <div class="modal-content p-6 has-background-warning has-text-black">
+        <h1 class="is-size-3 title">Log In!</h1>
+        <form id="login_form">
+          <!-- Email -->
+          <div class="field">
+            <label class="label">Email</label>
+            <div class="control">
+              <input type="email" id="email_" />
+            </div>
+          </div>
+          <!-- Password -->
+          <div class="field">
+            <label class="label">Password</label>
+            <div class="control">
+              <input type="password" id="password_" />
+            </div>
+          </div>
+          <div id="incorrect_pw" class="has-text-danger"></div>
+
+          <!-- submit -->
+          <div class="field">
+            <div class="control">
+              <button class="m-3 button is-black">Submit</button>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <nav
+      class="navbar is-primary pt-3 p-0 m-0"
+      role="navigation"
+      aria-label="main navigation"
+    >
+      <div class="navbar-brand pb-3">
+        <a class="navbar-item is-size-4 pt-7 ml-4" id="home"> Home </a>
+        <a class="navbar-item is-size-4 pt-7" id="adopt"> Adopt </a>
+        <a class="navbar-item is-size-4 pt-7" id="about"> About </a>
+        <div class="navbar-burger" data-target="navbarMenu">
+          <span></span>
+          <span></span>
+          <span></span>
+        </div>
+      </div>
+
+      <div id="navbarMenu" class="navbar-menu">
+        <div class="navbar-end">
+          <div class="navbar-item">
+            <div class="buttons">
+              <a class="button is-warning" href="#" id="signupbtn"> Sign Up </a>
+              <a class="button is-light" href="#" id="loginbtn"> Log In </a>
+              <a class="button is-link" href="#" id="postpet_button">
+                POST A PET
+              </a>
+              <div class="navbar-item has-dropdown is-hoverable mb-2 mr-4">
+                <a class="navbar-link is-hidden" id="myaccount">
+                  <div class="round-logo has-background-grey-light">
+                    <p id="account-circle"></p>
+                  </div>
+                </a>
+                <div class="navbar-dropdown">
+                  <div class="navbar-item">
+                    <p id="user_email" class=""></p>
+                  </div>
+                  <div class="navbar-item">
+                    <a class="has-text-link" id="signoutbtn"> Sign Out </a>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </nav>
+
+    <!-- message bar -->
+    <p
+      id="message_bar"
+      class="p-2 has-text-centered has-background-warning is-hidden is-bold is-size-5 has-text-warning"
+    ></p>
+
+    <!-- adoption stuff -->
+    <div class="modal" id="pet_modal">
+      <div class="modal-background" id="pet_modalbg"></div>
+      <div class="modal-content p-6 has-background-warning has-text-black">
+        <h1 class="is-size-3 title">Post a Pet</h1>
+        <form id="pet_form">
+          <!-- Pet Type -->
+          <div class="field">
+            <label class="label has-text-black">Pet Type</label>
+            <div class="control">
+              <div class="select">
+                <select id="pet_type" required>
+                  <option value="Dog">Dog</option>
+                  <option value="Cat">Cat</option>
+                  <option value="Bird">Bird</option>
+                  <option value="Turtle">Turtle</option>
+                  <option value="Hamster">Hamster</option>
+                  <option value="Guinea Pig">Guinea Pig</option>
+                  <option value="Snake">Snake</option>
+                  <option value="Rabbit">Rabbit</option>
+                  <!-- Add other options -->
+                </select>
+              </div>
+            </div>
+          </div>
+
+          <!-- Pet Breed -->
+          <div class="field">
+            <label class="label has-text-black">Pet Breed</label>
+            <div class="control">
+              <input type="text" id="pet_breed" placeholder="" required />
+            </div>
+          </div>
+
+          <!-- Pet Name -->
+          <div class="field">
+            <label class="label has-text-black">Pet Name</label>
+            <div class="control">
+              <input type="text" id="pet_name" placeholder="" required />
+            </div>
+          </div>
+
+          <!-- Short Description -->
+          <div class="field">
+            <label class="label has-text-black">Short Description</label>
+            <div class="control mb-0">
+              <textarea
+                id="pet_desc"
+                placeholder=""
+                rows="5"
+                style="width: 100%"
+                maxlength="300"
+                required
+              ></textarea>
+              <p class="is-size-7 pt-0 has-text-black">*Max 300 characters</p>
+            </div>
+          </div>
+
+          <!-- Location -->
+          <div class="field">
+            <label class="label has-text-black">Location</label>
+            <div class="control">
+              <input type="text" id="pet_location" placeholder="" required />
+            </div>
+          </div>
+
+          <div class="field">
+            <label class="label">Image</label>
+            <div class="control">
+              <input
+                class="input"
+                type="file"
+                id="pet_image"
+                placeholder="Choose Image"
+              />
+            </div>
+          </div>
+          <div id="unfilled_form" class="has-text-danger"></div>
+
+          <!-- Submit -->
+          <div class="field">
+            <div class="control">
+              <button class="m-3 button is-black" id="submit_pet" type="button">
+                Submit
+              </button>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <div id="main_home" class="">
+      <section
+        class="hero is-medium is-primary is-bold mb-0 pb-0"
+        style="
+          background-image: url(Images/bigstock-Woman-And-Her-Dog-Shaking-Hand-53038867.jpg);
+          background-size: cover;
+          background-position: center top; /* Adjusted this line */
+          height: 400px;
+        "
+      >
+        <div class="hero-body">
+          <div class="container has-text-centered">
+            <h1 class="title has-text-white" style="font-size: 70px">
+              Where Pets Find Their People
+            </h1>
+          </div>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="container">
+          <h2 class="box title is-2 has-text-centered mt-0">Our Stories</h2>
+
+          <div class="box columns">
+            <div class="column is-half">
+              <figure class="image">
+                <img src="Images/happy2.jpg" alt="" style="width: 100%" />
+              </figure>
+            </div>
+            <div
+              class="column is-half is-size-5 is-size-9-mobile has-text-centered m-auto"
+            >
+              <p>
+                Meet Jonah and his loyal companion, Ruby. Their story began when
+                Jonah discovered Ruby abandoned and lonely. Scrolling through
+                FurEver's website, Jonah stumbled upon Ruby's profile, and it
+                was love at first sight. Now, inseparable, they embark on
+                adventures, creating a bond that goes beyond words. Ruby, once
+                lost, has found a forever home with Jonah, proving that every
+                pet deserves a chance at happiness.
+              </p>
+            </div>
+          </div>
+
+          <div class="box columns mt-2">
+            <div class="column is-half">
+              <figure class="image">
+                <img src="Images/happy1.jpg" alt="" style="width: 100%" />
+              </figure>
+            </div>
+            <div
+              class="column is-half is-size-5 is-size-9-mobile has-text-centered m-auto"
+            >
+              <p>
+                Here are Edith and her two delightful companions, Dora and
+                Diego. Edith's journey with FurEver began after the unfortunate
+                loss of her cherished pet cat. Searching for solace, Edith
+                explored FurEver's platform and discovered Dora and Diego. These
+                two bundles of joy not only mended Edith's broken heart but also
+                brought laughter and love back into her life. Together, they've
+                formed a family, proving that FurEver is a place where new
+                beginnings and heartfelt connections flourish.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+
+    <div id="main_adopt" class="is-hidden">
+      <div class="columns">
+        <!-- Left Column -->
+
+        <div
+          class="column is-3 has-background-warning-light mt-5 p-6 mb-5"
+          id="l_column"
+        >
+          <div>
+            <div class="select is-info">
+              <select id="filter_by_type_dropdown">
+                <option value="" selected disabled>Filter By Animal</option>
+                <option value="Dog">Dog</option>
+                <option value="Cat">Cat</option>
+                <option value="Bird">Bird</option>
+                <option value="Turtle">Turtle</option>
+                <option value="Hamster">Hamster</option>
+                <option value="Guinea Pig">Guinea Pig</option>
+                <option value="Snake">Snake</option>
+                <option value="Rabbit">Rabbit</option>
+                <!-- Add more options as needed -->
+              </select>
+            </div>
+
+            <p class="control">
+              <span class="is-size-6 has-text-weight-bold mt-1 mb-1">OR</span>
+            </p>
+
+            <input
+              type="text"
+              id="search_box"
+              class="input mb-2"
+              placeholder="Search location"
+            />
+            <p>
+              <button
+                class="button has-background-grey-light mb5 has-text-weight-bold"
+                id="search_button"
+              >
+                Search
+              </button>
+            </p>
+          </div>
+
+          <p class="mt-5">
+            <button
+              class="button has-background-primary has-text-weight-bold"
+              id="my_pets_button"
+            >
+              My Pets
+            </button>
+          </p>
+        </div>
+
+        <!-- Center Column  -->
+
+        <div class="column is-6 p-6" id="main_adopt_inside"></div>
+
+        <!-- Right Column  -->
+
+        <div
+          class="column is-3 has-background-warning-light mt-5 p-6 mb-5"
+          id="r_column"
+        ></div>
+      </div>
+    </div>
+
+    <div id="main_about" class="is-hidden">
+      <div class="box about-section">
+        <h2 class="title">Our Mission</h2>
+        <p>
+          At FurEver, our mission is to connect individuals with their perfect
+          furry companions while promoting responsible pet ownership. We aim to
+          increase adoption rates, improve communication between adopters and
+          shelters, and encourage user-generated content sharing.
+        </p>
+      </div>
+
+      <div class="box about-section">
+        <h2 class="title">Our Vision</h2>
+        <p>
+          We envision a world where every pet finds a loving and forever home.
+          We strive to be the go-to platform for pet adoption and pet-related
+          resources.
+        </p>
+      </div>
+
+      <div class="box about-section">
+        <h2 class="title">Our Goals</h2>
+        <div class="content">
+          <ul>
+            <li>
+              Facilitating pet adoption by providing a user-friendly platform to
+              connect with adoptable animals.
+            </li>
+            <li>
+              Raising awareness about responsible pet ownership through
+              educational resources.
+            </li>
+            <li>
+              Creating a vibrant community of pet lovers who can share their
+              experiences, reviews, and recommendations.
+            </li>
+            <li>
+              Increasing adoption rates and improving communication between
+              adopters and shelters or rescue organizations.
+            </li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="box about-section mb-5">
+        <h2 class="title">Contact Us</h2>
+        <p>
+          If you have any questions or suggestions, please feel free to reach
+          out at
+          <a href="mailto:atif@wisc.edu" style="color: blue"> atif@wisc.edu</a>.
+        </p>
+      </div>
+    </div>
+
+    <footer
+      class="footer has-background-primary has-text-white has-text-centered"
+      style="padding: 10px 0; font-size: 14px"
+    >
+      <div class="content is-size-6">
+        <p class="m-0">&copy; FurEver</p>
+        <p class="m-0">Mohammed Atif</p>
+        <p class="m-0">IS 371 Project</p>
+      </div>
+    </footer>
+
+    <!-- Insert these scripts at the bottom of the HTML, but before you use any Firebase services -->
+
+    <!-- Firebase App (the core Firebase SDK) is always required and must be listed first -->
+    <script src="https://www.gstatic.com/firebasejs/8.3.1/firebase-app.js"></script>
+
+    <!-- If you enabled Analytics in your project, add the Firebase SDK for Analytics -->
+    <script src="https://www.gstatic.com/firebasejs/8.3.1/firebase-analytics.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.3.1/firebase-storage.js"></script>
+
+    <!-- Add Firebase products that you want to use -->
+    <script src="https://www.gstatic.com/firebasejs/8.3.1/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.3.1/firebase-firestore.js"></script>
+
+    <script>
+      // TODO
+      // Copy **only** your firebaseConfig from Google Firebae and add it below
+      const firebaseConfig = {
+        <!--hidden-->
+      };
+      // Initialize Firebase
+      firebase.initializeApp(firebaseConfig);
+      // define authentication variable
+      let auth = firebase.auth();
+      let db = firebase.firestore();
+
+      let ref = firebase.storage().ref();
+    </script>
+    <!-- make sure to add your own js file as the last line in index.html file -->
+    <script src="app.js"></script>
+  </body>
+</html>
